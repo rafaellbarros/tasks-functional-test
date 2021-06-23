@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskTest {
 
+    // TODO: config to get to properties
+    private static final String URL_BASE = "http://192.168.1.7";
 
     @Before
     public void setUp() {
@@ -23,8 +25,8 @@ public class TaskTest {
     public WebDriver acessarAplicacao() throws MalformedURLException {
         // final WebDriver driver = new ChromeDriver();
         final DesiredCapabilities cap = DesiredCapabilities.chrome();
-        final WebDriver driver =new RemoteWebDriver(new URL("http://192.168.1.7:4444/wd/hub"), cap);
-        driver.navigate().to("http://192.168.1.7:8001/tasks");
+        final WebDriver driver =new RemoteWebDriver(new URL(URL_BASE + ":4444/wd/hub"), cap);
+        driver.navigate().to(URL_BASE + ":8001/tasks");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
