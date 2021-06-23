@@ -52,7 +52,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <skip.surefire.tests>true</skip.surefire.tests>
     </properties>
 
 </project>
