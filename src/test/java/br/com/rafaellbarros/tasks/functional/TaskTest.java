@@ -5,8 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class TaskTest {
@@ -17,15 +20,17 @@ public class TaskTest {
         System.setProperty("webdriver.chrome.driver", "/home/rafael/env/tools/drivers/chromedriver");
     }
 
-    public WebDriver acessarAplicacao() {
-        final WebDriver driver = new ChromeDriver();
+    public WebDriver acessarAplicacao() throws MalformedURLException {
+        // final WebDriver driver = new ChromeDriver();
+        final DesiredCapabilities cap = DesiredCapabilities.chrome();
+        final WebDriver driver =new RemoteWebDriver(new URL("http://172.17.0.1:4444/wd/hub"), cap);
         driver.navigate().to("http://localhost:8001/tasks");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
 
     @Test
-    public void deveSalvarTarefaComSucesso() {
+    public void deveSalvarTarefaComSucesso() throws MalformedURLException {
         final WebDriver driver = acessarAplicacao();
 
         try {
@@ -52,7 +57,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaSemDescricao() {
+    public void naoDeveSalvarTarefaSemDescricao() throws MalformedURLException {
         final WebDriver driver = acessarAplicacao();
 
         try {
@@ -75,7 +80,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaSemData() {
+    public void naoDeveSalvarTarefaSemData() throws MalformedURLException {
         final WebDriver driver = acessarAplicacao();
 
         try {
@@ -99,7 +104,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaComDataPassada() {
+    public void naoDeveSalvarTarefaComDataPassada() throws MalformedURLException {
         final WebDriver driver = acessarAplicacao();
 
         try {
