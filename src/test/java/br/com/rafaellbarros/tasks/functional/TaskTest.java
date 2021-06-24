@@ -10,6 +10,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class TaskTest {
@@ -43,7 +45,9 @@ public class TaskTest {
             driver.findElement(By.id("task")).sendKeys("Teste via selenium");
 
             // escrever a data
-            driver.findElement(By.id("dueDate")).sendKeys("23/06/2021");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            final String dataAtual = LocalDate.now().format(formatter);
+            driver.findElement(By.id("dueDate")).sendKeys(dataAtual);
 
             // clicar em salvar
             driver.findElement(By.id("saveButton")).click();
