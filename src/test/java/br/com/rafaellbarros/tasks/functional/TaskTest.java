@@ -1,5 +1,6 @@
 package br.com.rafaellbarros.tasks.functional;
 
+import br.com.rafaellbarros.tasks.utils.DataUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,6 @@ public class TaskTest {
     }
 
     public WebDriver acessarAplicacao() throws MalformedURLException {
-        // final WebDriver driver = new ChromeDriver();
         final DesiredCapabilities cap = DesiredCapabilities.chrome();
         final WebDriver driver =new RemoteWebDriver(new URL(URL_BASE + ":4444/wd/hub"), cap);
         driver.navigate().to(URL_BASE + ":8001/tasks");
@@ -38,24 +38,15 @@ public class TaskTest {
         final WebDriver driver = acessarAplicacao();
 
         try {
-            // clicar em ADd Todo
+
             driver.findElement(By.id("addTodo")).click();
-
-            //  escrever descrição
             driver.findElement(By.id("task")).sendKeys("Teste via selenium");
-
-            // escrever a data
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            final String dataAtual = LocalDate.now().format(formatter);
+            final String dataAtual = DataUtil.convertLocalDateToDateStringBR(LocalDate.now());
             driver.findElement(By.id("dueDate")).sendKeys(dataAtual);
-
-            // clicar em salvar
             driver.findElement(By.id("saveButton")).click();
-
-            // validar mensagem de sucesso
             final String message = driver.findElement(By.id("message")).getText();
-
             Assert.assertEquals("Success!", message);
+
         } finally {
             driver.quit();
         }
@@ -71,7 +62,8 @@ public class TaskTest {
             driver.findElement(By.id("addTodo")).click();
 
             // escrever a data
-            driver.findElement(By.id("dueDate")).sendKeys("23/06/2021");
+            final String dataAtual = DataUtil.convertLocalDateToDateStringBR(LocalDate.now());
+            driver.findElement(By.id("dueDate")).sendKeys(dataAtual);
 
             // clicar em salvar
             driver.findElement(By.id("saveButton")).click();
@@ -121,7 +113,8 @@ public class TaskTest {
             driver.findElement(By.id("task")).sendKeys("Teste via selenium");
 
             // escrever a data
-            driver.findElement(By.id("dueDate")).sendKeys("23/06/2010");
+            final String dataOntem = DataUtil.convertLocalDateToDateStringBR(LocalDate.MIN.minusDays(1));
+            driver.findElement(By.id("dueDate")).sendKeys(dataOntem);
 
             // clicar em salvar
             driver.findElement(By.id("saveButton")).click();
@@ -130,6 +123,30 @@ public class TaskTest {
             final String message = driver.findElement(By.id("message")).getText();
 
             Assert.assertEquals("Due date must not be in past", message);
+        } finally {
+            driver.quit();
+        }
+
+    }
+
+    @Test
+    public void deveRemoverTarefaComSucesso() throws MalformedURLException {
+        final WebDriver driver = acessarAplicacao();
+
+        try {
+
+            driver.findElement(By.id("addTodo")).click();
+            driver.findElement(By.id("task")).sendKeys("Teste via selenium");
+            final String dataAtual = DataUtil.convertLocalDateToDateStringBR(LocalDate.now());
+            driver.findElement(By.id("dueDate")).sendKeys(dataAtual);
+            driver.findElement(By.id("saveButton")).click();
+            String message = driver.findElement(By.id("message")).getText();
+            Assert.assertEquals("Success!", message);
+
+            driver.findElement(By.xpath("//a[@class='btn btn-outline-danger btn-sm']"));
+            message = driver.findElement(By.id("message")).getText();
+            Assert.assertEquals("Success!", message);
+
         } finally {
             driver.quit();
         }
