@@ -113,7 +113,7 @@ public class TaskTest {
             driver.findElement(By.id("task")).sendKeys("Teste via selenium");
 
             // escrever a data
-            final String dataOntem = DataUtil.convertLocalDateToDateStringBR(LocalDate.MIN.minusDays(1));
+            final String dataOntem = DataUtil.convertLocalDateToDateStringBR(LocalDate.now().minusDays(1));
             driver.findElement(By.id("dueDate")).sendKeys(dataOntem);
 
             // clicar em salvar
